@@ -154,6 +154,8 @@ h1, h2, h3, p, figure { margin: 0; }
 .route-metrics strong { font-size: 15px; }
 .route-summary .route-intro { color: #e5efe6; }
 .fit-route { width: 100%; text-align: left; margin-top: 14px; padding: 9px 11px; color: #204a42; background: #f5f3e9; border: 0; border-radius: 4px; font-size: 10px; font-weight: 700; }
+.poster-download { display: block; width: auto; margin-top: 8px; color: #fffdf5; background: #ffffff24; border: 1px solid #ffffff70; text-decoration: none; }
+.poster-download:hover, .poster-download:focus-visible { background: #ffffff38; }
 .route-mode-note { padding: 13px 2px 0; color: #71877b; font-size: 10px; line-height: 1.75; }
 .route-days { margin-top: 19px; padding-left: 9px; border-left: 1px solid #dce6db; }
 .route-day { position: relative; margin-bottom: 9px; padding: 10px 11px 12px 13px; border: 1px solid #e4e9df; border-radius: 7px; background: #fbfcf8; }

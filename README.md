@@ -17,6 +17,7 @@ npm run dev
 - 点击地图标点或地点列表查看说明、经纬度和位置来源。
 - 按精选、自然、湖泊、人文筛选；`⌘/Ctrl + K` 聚焦搜索，`Esc` 关闭卡片。
 - 点击顶部“推荐路线”，切换 3、5、7 天南疆行程；7 天可选西极荒原或莎车慢行。选择出发日期、自驾／火车加包车／飞机加包车、游玩地点数量，地图会重排停靠顺序并按天定位。
+- 选择“7 天 / 莎车慢行 / 自驾 / 多点摄影”后，可下载 [10000 × 7000 的完整行进图](public/exports/pamir-shache-7-day-road-trip.png)，含每天的道路轨迹、方向、停靠顺序和估算里程。生成脚本为 `scripts/export_pamir_route.py`，需要 Python Pillow 和中文字体；离线执行 `python3 scripts/export_pamir_route.py` 可重绘，需要重新获取路由数据时才运行 `python3 scripts/export_pamir_route.py --fetch-routes`。
 - 已获开放许可的摄影作品会在地点卡片中展示，并逐张列出作者、原图来源和许可证。没有合适授权的地点暂时只显示位置。
 - 窄屏用左上角菜单查看地点列表；可分享带 `?place=地点ID` 的网址。
 
@@ -28,6 +29,7 @@ npm run dev
 - 衍生地点数据库遵守 [OpenStreetMap ODbL 1.0](https://www.openstreetmap.org/copyright)，与代码的 [MIT 许可证](LICENSE) 分开。详见 [DATA_LICENSE.md](DATA_LICENSE.md)。大型景区、湖泊和老城片区的标点仅供总览，**不能用于导航**。
 - 14 幅摄影作品来自 Wikimedia Commons 和 Flickr 的开放许可作品，分布在 4 个地点。每幅图片独立遵守其标注的 CC BY 或 CC BY-SA 许可，详情见 [图片目录](src/photoCatalog.json)及网站的[摄影来源与版权说明](public/COPYRIGHT.html)。代码的 MIT 许可不覆盖摄影作品。
 - 路线编辑数据在 `src/routes.js`，默认出发日期 2026-10-01。参考 [自治区文旅厅帕米尔线路](https://wlt.xinjiang.gov.cn/wlt/c112786/202402/04ec109e9ce24ac5aa955ca8eb8c6c7a.shtml) 和 [2026 年新疆国庆放假安排](https://www.xinjiang.gov.cn/xinjiang/tzgg/202512/aaece21b6906443e8d50b981070764a8.shtml)。地图线路是按停靠点连接的**行程示意**，不是实际道路导航；不包含实时路况、交通时刻或车程估算。西极所在的吉根乡等边境区域应参照[克州边境通行证说明](https://www.xjkz.gov.cn/xjkz/c102165/202307/e661dc3ce5534e55bca0bb30c8735474.shtml)事先办理。火车车次、余票以[铁路 12306](https://www.12306.cn/)为准。
+- 单张导出图额外使用 [OSRM 公共路由服务](https://project-osrm.org/) 计算路段，缓存轨迹位于 `public/data/routes/pamir-7-slow-full-osrm.json`。图上里程为路由估算，景点可能离道路有距离；道路开放、景区入口与行车方案均需临行再核实。路线及底层道路数据来自 OpenStreetMap 贡献者，按 ODbL 署名。
 
 本项目供朋友做非商业旅行规划。**“非商业”“注明来源”“侵权告知删除”不能替代图片授权**；许可不明的照片仅保存在未公开的本地目录。若发现图片归属、署名或使用问题，请通过 [GitHub Issue 提交版权与撤图请求](https://github.com/myki-jim/xinjiang-atlas/issues/new?title=%E5%9B%BE%E7%89%87%E7%89%88%E6%9D%83%E4%B8%8E%E6%92%A4%E5%9B%BE)，提供地点和图片链接，我们会核查、更正或撤除。公开 Issue 中请勿发布私密证件。
 
