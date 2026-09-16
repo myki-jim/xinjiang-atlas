@@ -23,7 +23,8 @@ from PIL import Image, ImageChops, ImageDraw, ImageFont
 ROOT = Path(__file__).resolve().parents[1]
 ROUTE_DATA = ROOT / "public/data/routes/pamir-7-slow-full-osrm.json"
 OUTPUT = ROOT / "public/exports/pamir-shache-7-day-road-trip.png"
-W, H = 10000, 7000
+W, H = 10000, 6600
+MAP_BOX = (260, 760, 6430, 6140)
 FONT = next((str(path) for path in [
     Path("/System/Library/Fonts/Hiragino Sans GB.ttc"),
     Path("/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc"),
@@ -78,7 +79,7 @@ def font(size: int) -> ImageFont.FreeTypeFont:
 def px(lon: float, lat: float) -> tuple[float, float]:
     # Local equirectangular projection. Different x/y scales account roughly
     # for longitude convergence near 39° N, without pretending survey accuracy.
-    return (1110 + (lon - 74.4) * 1450, 1370 + (39.83 - lat) * 1870)
+    return (660 + (lon - 74.7) * 1830, 1050 + (39.62 - lat) * 2050)
 
 
 def fetch_routes() -> dict:
@@ -156,8 +157,8 @@ def draw_geometry(draw, data):
         points = [px(lon, lat) for lon, lat in coords]
         offset = offsets[i]
         points = [(x+offset, y+offset) for x, y in points]
-        line_width(draw, points, "#FFFDF8", 41)
-        line_width(draw, points, COLORS[i], 23)
+        line_width(draw, points, "#FFFDF8", 45)
+        line_width(draw, points, COLORS[i], 27)
         # Draw direction on long successive legs, and only one on tiny ones.
         boundaries = [tuple(px(*loc)) for loc in day_route["snapped"]]
         prev = 0
@@ -184,8 +185,8 @@ def text(draw, xy, string, size, fill=INK, anchor=None, spacing=10):
 
 
 def base_map(im, draw):
-    box = (285, 1015, 6420, 6450)
-    round_rect(draw, box, 60, "#E8EBDD")
+    box = MAP_BOX
+    round_rect(draw, box, 54, "#E7EBDC")
     # The cropped Xinjiang polygon is the atlas's own public/data boundary.
     boundary = json.loads((ROOT / "public/data/xinjiang.geojson").read_text())
     rings = boundary["geometry"]["coordinates"]
@@ -193,82 +194,138 @@ def base_map(im, draw):
     layer_draw = ImageDraw.Draw(layer)
     for ring in rings:
         projected = [(px(lon, lat)[0]-box[0], px(lon, lat)[1]-box[1]) for lon, lat in ring]
-        layer_draw.polygon(projected, fill="#E8EBDD")
+        layer_draw.polygon(projected, fill="#E7EBDC")
         layer_draw.line(projected, fill="#C2CCBE", width=5, joint="curve")
     rounded_mask = Image.new("L", layer.size)
-    ImageDraw.Draw(rounded_mask).rounded_rectangle((0, 0, *layer.size), radius=60, fill=255)
+    ImageDraw.Draw(rounded_mask).rounded_rectangle((0, 0, *layer.size), radius=54, fill=255)
     im.paste(layer, box[:2], ImageChops.multiply(layer.getchannel("A"), rounded_mask))
-    # Coordinate grid is the positional context; muted decorative stipples do
-    # not claim to be elevation contours or mapped tracks.
-    for lon in [74.5, 75, 75.5, 76, 76.5, 77, 77.5]:
+    # Graticule, nearby towns, highway names and a truthful local scale give
+    # positional context without presenting decorative relief as elevation.
+    for lon in [75, 75.5, 76, 76.5, 77, 77.5]:
         x = px(lon, 39)[0]
-        draw.line((x, 1240, x, 6240), fill="#D5DED3", width=2)
-        text(draw, (x+13, 6270), f"{lon:g}° E", 27, "#9BAAA0")
+        draw.line((x, 870, x, 5995), fill="#CFD9CC", width=2)
+        text(draw, (x+14, 6000), f"{lon:g}° E", 30, "#87998D")
     for lat in [37.5, 38, 38.5, 39, 39.5]:
         y = px(75, lat)[1]
-        draw.line((420, y, 6170, y), fill="#D5DED3", width=2)
-        text(draw, (470, y+15), f"{lat:g}° N", 27, "#9BAAA0")
-    text(draw, (493, 1168), "地理位置  /  途经地点", 42, "#58716A")
-    text(draw, (4800, 1180), "N ↑", 58, SEA)
-    text(draw, (465, 6060), "PAMIR PLATEAU / 帕米尔高原", 39, "#9AA99A")
-    text(draw, (4760, 5930), "YARKAND / 叶尔羌", 38, "#9AA99A")
-    # The boundary above is deliberately pale; it is not a road or route.
+        draw.line((380, y, 6270, y), fill="#CFD9CC", width=2)
+        text(draw, (395, y+14), f"{lat:g}° N", 28, "#87998D")
+    text(draw, (420, 850), "南疆  /  帕米尔—叶尔羌局部", 48, "#56736A")
+    text(draw, (4590, 849), "N ↑", 59, SEA)
+
+    for x, y, label in [
+        (*px(75.99197, 39.47233), "喀什市"),
+        (*px(74.97811, 38.69106), "布伦口"),
+        (*px(75.232631, 37.7823), "塔什库尔干"),
+        (*px(77.25477, 38.41517), "莎车县"),
+    ]:
+        draw.ellipse((x-11, y-11, x+11, y+11), fill=SEA)
+        # Destination callouts below name the sights; town names in the inset
+        # and at the roadside explain where each segment sits.
+    round_rect(draw, (3160, 2820, 4210, 2900), 30, "#FFFFFFCB")
+    text(draw, (3685, 2860), "G314  中巴公路", 40, "#698078", anchor="mm")
+    round_rect(draw, (4300, 2490, 5500, 2570), 30, "#FFFFFFCB")
+    text(draw, (4900, 2530), "喀什—莎车通道", 39, "#698078", anchor="mm")
+    text(draw, (445, 2220), "克州 · 阿克陶", 42, "#A5B1A0")
+    text(draw, (4460, 3000), "喀什地区", 42, "#A5B1A0")
+
+    # A miniature outline of Xinjiang locates this crop in the province.
+    inset = (5100, 940, 6225, 1835)
+    round_rect(draw, inset, 38, "#FFFDF6", "#D3DED0", 3)
+    text(draw, (5190, 997), "新疆 / 当前区域", 43, INK)
+    lon_min, lon_max, lat_min, lat_max = 73.2, 96.8, 34.2, 49.5
+    def mini(lon, lat):
+        return (5195 + (lon-lon_min)/(lon_max-lon_min)*940,
+                1190 + (lat_max-lat)/(lat_max-lat_min)*565)
+    for ring in rings:
+        draw.polygon([mini(lon, lat) for lon, lat in ring], fill="#DBE5D5", outline="#9CB2A4", width=3)
+    route_corner = mini(75.7, 38.65)
+    draw.ellipse((route_corner[0]-30, route_corner[1]-30, route_corner[0]+30, route_corner[1]+30),
+                 fill="#D46A4B", outline="#FFFDF6", width=8)
+    text(draw, (5720, 1700), "●  南疆行程范围", 30, "#688076")
+
+    # At ~39° N, 50 km east-west occupies about this many image pixels.
+    scale_px = 50 / (111.32 * math.cos(math.radians(39))) * 1830
+    sx, sy = 450, 5775
+    draw.line((sx, sy, sx+scale_px, sy), fill=INK, width=12)
+    draw.line((sx, sy-22, sx, sy+22), fill=INK, width=8)
+    draw.line((sx+scale_px, sy-22, sx+scale_px, sy+22), fill=INK, width=8)
+    text(draw, (sx, sy+33), "0", 34, SEA)
+    text(draw, (sx+scale_px-115, sy+33), "约 50 km", 34, SEA)
 
 
 def legend(draw):
-    text(draw, (430, 5585), "每天的颜色", 34, MUTED)
+    text(draw, (1970, 5735), "每日线色", 36, MUTED)
     for i, color in enumerate(COLORS):
-        x = 435 + i*780
-        round_rect(draw, (x, 5688, x+42, 5730), 16, color)
-        text(draw, (x+57, 5683), f"D{i+1}", 47, INK)
-    text(draw, (435, 5845), "→ 行进方向    • 景点锚点    ⋯ 道路与景点的连接", 37, MUTED)
+        x = 1970 + i*555
+        round_rect(draw, (x, 5802, x+40, 5842), 16, color)
+        text(draw, (x+50, 5790), f"D{i+1}", 46, INK)
+    text(draw, (1970, 5935), "箭头 = 行进方向    ◯ = 地点锚点    虚线 = 道路至景点", 35, MUTED)
 
 
 def point_labels(draw):
-    # Nearby coordinates are grouped on the map; all 13 distinct stops and
-    # every repeat visit are spelled out in the ordered itinerary at right.
+    # Small editorial stickers sit next to geographic anchors. Paired stops
+    # remain grouped only on the map; the roadbook preserves every visit.
     clusters = [
-        (["kashgar", "gaotai"], "01–02", "喀什古城 · 高台民居", (3535, 1510), 1205),
-        (["oytakh"], "03", "奥依塔克红山", (3060, 2490), 1110),
-        (["baisha", "osm-n12421270105"], "04–05", "白沙湖 · 二号观景台", (550, 2980), 1260),
-        (["karakul"], "06", "喀拉库勒湖", (535, 3740), 1020),
-        (["osm-n4808866521"], "11", "塔合曼湿地", (410, 4360), 1120),
-        (["stone-city"], "07", "石头城遗址", (480, 5070), 1060),
-        (["osm-n13129567998", "osm-n13129567995"], "09–10", "班迪尔蓝湖 · 南北岸", (3400, 4570), 1290),
-        (["panlong"], "08", "盘龙古道", (3660, 5525), 970),
-        (["shache", "osm-w958776273"], "12–13", "莎车老城 · 王陵", (4810, 3370), 1250),
+        (["kashgar", "gaotai"], "01–02", "喀什古城 · 高台民居", "老城街巷  /  日落人文", (3010, 1035), 1420, 0),
+        (["oytakh"], "03", "奥依塔克红山", "赭红山体  /  逆光剪影", (2300, 2170), 1300, 1),
+        (["baisha", "osm-n12421270105"], "04–05", "白沙湖 · 二号观景台", "沙山映湖  /  黄昏候选", (400, 2690), 1460, 1),
+        (["karakul"], "06", "喀拉库勒湖", "✦  雪峰星空首选取景", (350, 3520), 1460, 2),
+        (["osm-n4808866521"], "11", "塔合曼湿地", "金色草甸  /  开放观景台", (340, 4260), 1360, 4),
+        (["stone-city"], "07", "石头城遗址", "遗址日落  /  塔县落脚", (390, 4920), 1360, 2),
+        (["osm-n13129567998", "osm-n13129567995"], "09–10", "班迪尔蓝湖 · 南北岸", "周边山区禁止露营", (2520, 4400), 1540, 3),
+        (["panlong"], "08", "盘龙古道", "盘山曲线  /  俯拍机位", (2910, 5105), 1370, 3),
+        (["shache", "osm-w958776273"], "12–13", "莎车老城 · 王陵", "叶尔羌土色  /  早晨扫街", (4780, 3250), 1450, 5),
     ]
-    for ids, number, label, (x, y), width in clusters:
+    for ids, number, label, tag, (x, y), width, day_index in clusters:
         lon = sum(PLACES[item][1] for item in ids)/len(ids)
         lat = sum(PLACES[item][2] for item in ids)/len(ids)
         ax, ay = px(lon, lat)
         # Connect center of badge to its precise map coordinate.
         target_x = min(max(ax, x), x+width)
-        target_y = min(max(ay, y), y+145)
-        draw.line((ax, ay, target_x, target_y), fill="#647F74", width=4)
-        draw.ellipse((ax-21, ay-21, ax+21, ay+21), fill="#FFFDF8", outline=SEA, width=7)
-        round_rect(draw, (x, y, x+width, y+145), 44, "#FFFDF8", "#C6D4CA", 3)
-        round_rect(draw, (x+18, y+25, x+185, y+120), 29, SEA)
-        text(draw, (x+100, y+72), number, 39 if len(number)>2 else 52, "#FFFFFF", anchor="mm")
-        text(draw, (x+210, y+69), label, 48, INK, anchor="lm")
+        target_y = min(max(ay, y), y+205)
+        draw.line((ax, ay, target_x, target_y), fill="#668176", width=5)
+        draw.ellipse((ax-25, ay-25, ax+25, ay+25), fill="#FFFDF8", outline=COLORS[day_index], width=9)
+        round_rect(draw, (x, y, x+width, y+205), 40, "#FFFDF8", "#B9CABD", 3)
+        round_rect(draw, (x+18, y+23, x+198, y+115), 28, COLORS[day_index])
+        text(draw, (x+107, y+69), number, 38 if len(number)>2 else 52, "#FFFFFF", anchor="mm")
+        text(draw, (x+218, y+38), label, 48, INK)
+        round_rect(draw, (x+20, y+137, x+width-20, y+190), 20, "#EAF0E5")
+        text(draw, (x+45, y+140), tag, 34, "#52756A")
 
 
 def right_panel(draw, data):
-    round_rect(draw, (6590, 1015, 9720, 6450), 60, "#FFFDF8")
-    text(draw, (6800, 1130), "DAILY ROADBOOK", 42, "#81958C")
-    text(draw, (6800, 1220), "逐日顺序", 84, INK)
-    text(draw, (6800, 1360), "由上往下读；重复地点表示折返或夜宿。", 41, MUTED)
-    cy = 1520
+    round_rect(draw, (6560, 760, 9740, 6140), 54, "#FFFDF8")
+    round_rect(draw, (6750, 925, 9530, 2055), 42, "#EAF0E9")
+    text(draw, (6830, 985), "NIGHT SKY / 星空与帐篷", 48, SEA)
+    text(draw, (6830, 1080), "取景点和露营地要分开确认", 45, "#597369")
+    draw.line((6830, 1190, 9465, 1190), fill="#CAD9CB", width=4)
+    round_rect(draw, (6830, 1240, 7005, 1380), 35, COLORS[2])
+    text(draw, (6917, 1310), "01", 54, "#FFFFFF", anchor="mm")
+    text(draw, (7065, 1235), "喀拉库勒湖  ·  雪山与星空", 56, INK)
+    text(draw, (7065, 1330), "最有画面；要拍到夜空，D3 住宿需改到获许可营地。", 39, MUTED)
+    text(draw, (7065, 1405), "不周山营地在景区内；自带帐篷须先向经营方确认。", 37, MUTED)
+    round_rect(draw, (6830, 1515, 7005, 1655), 35, COLORS[3])
+    text(draw, (6917, 1585), "02", 54, "#FFFFFF", anchor="mm")
+    text(draw, (7065, 1510), "塔县附近  ·  与原行程更合拍", 56, INK)
+    text(draw, (7065, 1605), "D4 在有管理、允许夜拍的营地或住宿地看星。", 39, MUTED)
+    text(draw, (7065, 1680), "班迪尔蓝湖周边山区禁止露营；别拍完再赶夜路。", 37, MUTED)
+    draw.line((6830, 1815, 9465, 1815), fill="#CAD9CB", width=4)
+    text(draw, (6830, 1860), "若 10/1 出发：10/3 下弦，后半程月光渐弱；还要看云量与风。", 37, SEA)
+
+    text(draw, (6765, 2145), "DAILY ROADBOOK", 36, "#81958C")
+    text(draw, (7160, 2120), "逐日顺序 · 7 DAYS", 65, INK)
+    text(draw, (6765, 2230), "重复出现的地点代表折返；公里数是道路估算。", 35, MUTED)
+    cy = 2360
     for number, day in enumerate(DAYS, 1):
         color = COLORS[number-1]
-        y = cy+(number-1)*678
-        round_rect(draw, (6770, y, 9545, y+638), 35, "#F4F4EC")
-        round_rect(draw, (6820, y+54, 6965, y+191), 37, color)
-        text(draw, (6892, y+124), f"D{number}", 51, "#FFFFFF", anchor="mm")
-        text(draw, (7030, y+60), day["title"], 63, INK)
+        y = cy+(number-1)*525
+        round_rect(draw, (6750, y, 9540, y+500), 31, "#F4F4EC")
+        round_rect(draw, (6800, y+40, 6945, y+169), 34, color)
+        text(draw, (6872, y+103), f"D{number}", 49, "#FFFFFF", anchor="mm")
+        text(draw, (7010, y+39), day["title"], 57, INK)
         road_km = round(data["days"][number-1]["distance_m"] / 1000)
-        text(draw, (7030, y+156), f"夜宿 {day['stay']}  ·  自驾约 {road_km} km", 37, MUTED)
-        draw.line((6830, y+245, 9490, y+245), fill="#DAE2D7", width=3)
+        text(draw, (7010, y+130), f"夜宿 {day['stay']}  ·  自驾约 {road_km} km", 35, MUTED)
+        draw.line((6800, y+220, 9480, y+220), fill="#DAE2D7", width=3)
         # Two rows and explicit arrows fit the densest day with five stops.
         names = day["line"]
         if len(names) == 5:
@@ -278,14 +335,12 @@ def right_panel(draw, data):
         else:
             rows = [names]
         for row_i, row in enumerate(rows):
-            ry = y+325+row_i*125
+            ry = y+258+row_i*90
             out = "  →  ".join(row)
-            size = 46 if len(out) < 27 else 39
-            text(draw, (6835, ry), out, size, INK)
-        if len(rows) == 1:
-            text(draw, (6835, y+500), "顺序见地图中的同色路线", 36, "#889B8F")
-        else:
-            text(draw, (6835, y+562), "↳ 接续上方，沿同色线路前进", 34, "#889B8F")
+            size = 45 if len(out) < 27 else 39
+            text(draw, (6810, ry), out, size, INK)
+        note = ["巷道 / 慢适应海拔", "红层 / 白沙湖岸", "高原湖 / 星空候选", "盘山路 / 蓝湖禁野营", "湿地 / 当天返城", "老城 / 王陵", "晨光 / 返程"][number-1]
+        text(draw, (6810, y+430), f"◈  {note}", 35, "#7D9688")
 
 
 def main():
@@ -297,14 +352,14 @@ def main():
 
     im = Image.new("RGB", (W, H), BG)
     draw = ImageDraw.Draw(im)
-    round_rect(draw, (0, 0, W, 825), 0, SEA)
-    text(draw, (350, 127), "经纬  /  XINJIANG ATLAS", 47, "#C4DDD4")
-    text(draw, (335, 242), "帕米尔与莎车 · 七日行进图", 140, "#FFFDF8")
-    text(draw, (355, 525), "喀什出发，途经红山与高原湖，抵达莎车后返回喀什。", 60, "#D5E4D9")
-    round_rect(draw, (7690, 212, 9670, 385), 82, "#D8E7D7")
-    text(draw, (8680, 296), "7 天   /   莎车慢行   /   自驾   /   多点摄影", 49, SEA, anchor="mm")
+    round_rect(draw, (0, 0, W, 650), 0, SEA)
+    text(draw, (320, 68), "经纬  /  XINJIANG ATLAS", 46, "#C4DDD4")
+    text(draw, (310, 164), "帕米尔与莎车 · 七日行进图", 125, "#FFFDF8")
+    text(draw, (325, 412), "喀什 → 帕米尔 → 莎车 → 喀什    /    7 天的公路、停靠与星空取景", 56, "#D5E4D9")
+    round_rect(draw, (7680, 119, 9680, 288), 80, "#D8E7D7")
+    text(draw, (8680, 200), "7 天   /   莎车慢行   /   自驾   /   多点摄影", 48, SEA, anchor="mm")
     total_km = round(sum(day["distance_m"] for day in data["days"]) / 1000)
-    text(draw, (7720, 550), f"13 个独立地图锚点  ·  道路估算约 {total_km:,} km", 48, "#D8E7D7")
+    text(draw, (7720, 393), f"13 个独立地图锚点  ·  道路估算约 {total_km:,} km", 45, "#D8E7D7")
 
     base_map(im, draw)
     draw_geometry(draw, data)
@@ -312,8 +367,8 @@ def main():
     legend(draw)
     right_panel(draw, data)
 
-    text(draw, (340, 6650), "道路线条与里程据 OSRM / OpenStreetMap 估算；景点为位置锚点，色线的细微错位用于区分往返。此图用于行程总览，不是实时导航。", 35, MUTED)
-    text(draw, (340, 6740), "景区入口、盘龙古道通行及国庆道路情况，以出发时的官方信息和实地导航为准。地图数据 © OpenStreetMap contributors · ODbL", 33, MUTED)
+    text(draw, (315, 6250), "道路轨迹与里程据 OSRM / OpenStreetMap 估算；同路段颜色错位用于区分往返。取景点 ≠ 允许扎营地点；此图不能代替实时导航。", 35, MUTED)
+    text(draw, (315, 6350), "政策与天象参考：阿克陶县文旅局、塔县文旅局、NASA SkyCal。边防证、景区开放、天气、营地可自搭及交通管制请临行确认。© OpenStreetMap contributors · ODbL", 32, MUTED)
     OUTPUT.parent.mkdir(parents=True, exist_ok=True)
     im.save(OUTPUT, optimize=True)
     print(f"Wrote {OUTPUT} ({W} × {H}; {OUTPUT.stat().st_size/1048576:.1f} MiB)")

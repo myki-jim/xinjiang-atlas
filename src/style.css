@@ -157,6 +157,13 @@ h1, h2, h3, p, figure { margin: 0; }
 .poster-download { display: block; width: auto; margin-top: 8px; color: #fffdf5; background: #ffffff24; border: 1px solid #ffffff70; text-decoration: none; }
 .poster-download:hover, .poster-download:focus-visible { background: #ffffff38; }
 .route-mode-note { padding: 13px 2px 0; color: #71877b; font-size: 10px; line-height: 1.75; }
+.route-night { margin-top: 16px; padding: 17px; border: 1px solid #cfdfd2; border-radius: 7px; background: #eff5ed; }
+.route-night .eyebrow { color: #5e8878; font-size: 9px; letter-spacing: .12em; }
+.route-night h3 { margin: 9px 0 11px; color: #214e47; font: 600 16px/1.4 'Noto Serif SC',serif; }
+.route-night p { margin: 0 0 10px; color: #557568; font-size: 10px; line-height: 1.75; }
+.route-night strong { color: #275b52; }
+.route-night-links { display: flex; flex-wrap: wrap; gap: 7px; padding-top: 4px; }
+.route-night-links a { color: #8d6448; font-size: 9px; text-decoration: underline; }
 .route-days { margin-top: 19px; padding-left: 9px; border-left: 1px solid #dce6db; }
 .route-day { position: relative; margin-bottom: 9px; padding: 10px 11px 12px 13px; border: 1px solid #e4e9df; border-radius: 7px; background: #fbfcf8; }
 .route-day::before { content: ''; position: absolute; left: -13px; top: 21px; width: 6px; height: 6px; border-radius: 50%; background: #79a195; border: 2px solid #fffdf8; }
