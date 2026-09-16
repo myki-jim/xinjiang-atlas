@@ -1,0 +1,322 @@
+[
+  {
+    "id": "kanas-lake",
+    "name": "喀纳斯湖",
+    "region": "阿勒泰 · 布尔津",
+    "type": "高山湖泊",
+    "group": "湖泊",
+    "coord": [
+      87.055412,
+      48.813399
+    ],
+    "precision": "区域锚点",
+    "zoom": 12,
+    "subtitle": "高山湖泊 · 地图精选地点",
+    "note": "依据 OpenStreetMap 标注的位置；景区范围、入口及可通行路线请以当地信息为准。",
+    "locationSource": "https://www.openstreetmap.org/relation/1164854"
+  },
+  {
+    "id": "sayram",
+    "name": "赛里木湖",
+    "region": "博州 · 博乐",
+    "type": "高山湖泊",
+    "group": "湖泊",
+    "coord": [
+      81.170134,
+      44.60365
+    ],
+    "precision": "区域锚点",
+    "zoom": 12,
+    "subtitle": "高山湖泊 · 地图精选地点",
+    "note": "依据 OpenStreetMap 标注的位置；景区范围、入口及可通行路线请以当地信息为准。",
+    "locationSource": "https://www.openstreetmap.org/relation/35887"
+  },
+  {
+    "id": "nalati",
+    "name": "那拉提草原",
+    "region": "伊犁 · 新源",
+    "type": "草原",
+    "group": "自然",
+    "coord": [
+      84.100278,
+      43.259258
+    ],
+    "precision": "区域锚点",
+    "zoom": 12,
+    "subtitle": "草原 · 地图精选地点",
+    "note": "依据 OpenStreetMap 标注的位置；景区范围、入口及可通行路线请以当地信息为准。",
+    "locationSource": "https://www.openstreetmap.org/way/1264584234"
+  },
+  {
+    "id": "bayanbulak",
+    "name": "巴音布鲁克草原",
+    "region": "巴州 · 和静",
+    "type": "草原与湿地",
+    "group": "自然",
+    "coord": [
+      84.09565,
+      42.780347
+    ],
+    "precision": "区域锚点",
+    "zoom": 12,
+    "subtitle": "草原与湿地 · 地图精选地点",
+    "note": "依据 OpenStreetMap 标注的位置；景区范围、入口及可通行路线请以当地信息为准。",
+    "locationSource": "https://www.openstreetmap.org/way/599246764"
+  },
+  {
+    "id": "id-kah",
+    "name": "艾提尕尔清真寺",
+    "region": "喀什 · 喀什市",
+    "type": "历史建筑",
+    "group": "人文",
+    "coord": [
+      75.984104,
+      39.472295
+    ],
+    "precision": "区域锚点",
+    "zoom": 12,
+    "subtitle": "历史建筑 · 地图精选地点",
+    "note": "依据 OpenStreetMap 标注的位置；景区范围、入口及可通行路线请以当地信息为准。",
+    "locationSource": "https://www.openstreetmap.org/way/183318111"
+  },
+  {
+    "id": "jiaohe",
+    "name": "交河故城",
+    "region": "吐鲁番 · 高昌",
+    "type": "古城遗址",
+    "group": "人文",
+    "coord": [
+      89.061887,
+      42.952582
+    ],
+    "precision": "区域锚点",
+    "zoom": 12,
+    "subtitle": "古城遗址 · 地图精选地点",
+    "note": "依据 OpenStreetMap 标注的位置；景区范围、入口及可通行路线请以当地信息为准。",
+    "locationSource": "https://www.openstreetmap.org/relation/2440711"
+  },
+  {
+    "id": "kalajun",
+    "name": "喀拉峻",
+    "region": "伊犁 · 特克斯",
+    "type": "山地草原",
+    "group": "自然",
+    "coord": [
+      82.069888,
+      43.046764
+    ],
+    "precision": "区域锚点",
+    "zoom": 12,
+    "subtitle": "山地草原 · 地图精选地点",
+    "note": "依据 OpenStreetMap 标注的位置；景区范围、入口及可通行路线请以当地信息为准。",
+    "locationSource": "https://www.openstreetmap.org/relation/20618970"
+  },
+  {
+    "id": "hemu",
+    "name": "禾木村",
+    "region": "阿勒泰 · 布尔津",
+    "type": "村落",
+    "group": "人文",
+    "coord": [
+      87.430372,
+      48.569206
+    ],
+    "precision": "OSM 地图点",
+    "zoom": 12,
+    "subtitle": "村落 · 地图精选地点",
+    "note": "依据 OpenStreetMap 标注的位置；景区范围、入口及可通行路线请以当地信息为准。",
+    "locationSource": "https://www.openstreetmap.org/node/6118572418"
+  },
+  {
+    "id": "bazaar",
+    "name": "新疆国际大巴扎",
+    "region": "乌鲁木齐 · 天山",
+    "type": "巴扎",
+    "group": "人文",
+    "coord": [
+      87.615126,
+      43.778721
+    ],
+    "precision": "区域锚点",
+    "zoom": 12,
+    "subtitle": "巴扎 · 地图精选地点",
+    "note": "依据 OpenStreetMap 标注的位置；景区范围、入口及可通行路线请以当地信息为准。",
+    "locationSource": "https://www.openstreetmap.org/way/116303157"
+  },
+  {
+    "id": "tuyugou",
+    "name": "吐峪沟",
+    "region": "吐鲁番 · 鄯善",
+    "type": "峡谷与村落",
+    "group": "人文",
+    "coord": [
+      89.68884,
+      42.855349
+    ],
+    "precision": "区域锚点",
+    "zoom": 12,
+    "subtitle": "峡谷与村落 · 地图精选地点",
+    "note": "依据 OpenStreetMap 标注的位置；景区范围、入口及可通行路线请以当地信息为准。",
+    "locationSource": "https://www.openstreetmap.org/way/1428120315"
+  },
+  {
+    "id": "stone-city",
+    "name": "石头城遗址",
+    "region": "喀什 · 塔县",
+    "type": "古城遗址",
+    "group": "人文",
+    "coord": [
+      75.232631,
+      37.7823
+    ],
+    "precision": "区域锚点",
+    "zoom": 12,
+    "subtitle": "古城遗址 · 地图精选地点",
+    "note": "依据 OpenStreetMap 标注的位置；景区范围、入口及可通行路线请以当地信息为准。",
+    "locationSource": "https://www.openstreetmap.org/way/785258129"
+  },
+  {
+    "id": "panlong",
+    "name": "盘龙古道",
+    "region": "喀什 · 塔县",
+    "type": "山路观景",
+    "group": "自然",
+    "coord": [
+      75.600375,
+      37.639883
+    ],
+    "precision": "OSM 地图点",
+    "zoom": 12,
+    "subtitle": "山路观景 · 地图精选地点",
+    "note": "依据 OpenStreetMap 标注的位置；景区范围、入口及可通行路线请以当地信息为准。",
+    "locationSource": "https://www.openstreetmap.org/node/7331080786"
+  },
+  {
+    "id": "apricot",
+    "name": "吐尔根杏花沟",
+    "region": "伊犁 · 新源",
+    "type": "杏花山谷",
+    "group": "自然",
+    "coord": [
+      83.434451,
+      43.539565
+    ],
+    "precision": "OSM 地图点",
+    "zoom": 12,
+    "subtitle": "杏花山谷 · 地图精选地点",
+    "note": "依据 OpenStreetMap 标注的位置；景区范围、入口及可通行路线请以当地信息为准。",
+    "locationSource": "https://www.openstreetmap.org/node/9098287397"
+  },
+  {
+    "id": "baisha-altay",
+    "name": "白沙湖 · 阿勒泰",
+    "region": "阿勒泰 · 哈巴河",
+    "type": "湖泊",
+    "group": "湖泊",
+    "coord": [
+      85.742328,
+      48.354018
+    ],
+    "precision": "区域锚点",
+    "zoom": 12,
+    "subtitle": "湖泊 · 地图精选地点",
+    "note": "依据 OpenStreetMap 标注的位置；景区范围、入口及可通行路线请以当地信息为准。",
+    "locationSource": "https://www.openstreetmap.org/way/1327438355"
+  },
+  {
+    "id": "karakul",
+    "name": "喀拉库勒湖",
+    "region": "克州 · 阿克陶",
+    "type": "高原湖泊",
+    "group": "湖泊",
+    "coord": [
+      75.056133,
+      38.443394
+    ],
+    "precision": "区域锚点",
+    "zoom": 12,
+    "subtitle": "高原湖泊 · 地图精选地点",
+    "note": "依据 OpenStreetMap 标注的位置；景区范围、入口及可通行路线请以当地信息为准。",
+    "locationSource": "https://www.openstreetmap.org/way/977746833"
+  },
+  {
+    "id": "ulungu",
+    "name": "乌伦古湖公园",
+    "region": "阿勒泰 · 福海",
+    "type": "湖滨公园",
+    "group": "湖泊",
+    "coord": [
+      87.48467,
+      47.101508
+    ],
+    "precision": "区域锚点",
+    "zoom": 12,
+    "subtitle": "湖滨公园 · 地图精选地点",
+    "note": "依据 OpenStreetMap 标注的位置；景区范围、入口及可通行路线请以当地信息为准。",
+    "locationSource": "https://www.openstreetmap.org/way/930849564"
+  },
+  {
+    "id": "ghost",
+    "name": "世界魔鬼城",
+    "region": "克拉玛依 · 乌尔禾",
+    "type": "雅丹地貌",
+    "group": "自然",
+    "coord": [
+      85.755096,
+      46.115318
+    ],
+    "precision": "区域锚点",
+    "zoom": 12,
+    "subtitle": "雅丹地貌 · 地图精选地点",
+    "note": "依据 OpenStreetMap 标注的位置；景区范围、入口及可通行路线请以当地信息为准。",
+    "locationSource": "https://www.openstreetmap.org/way/1262110121"
+  },
+  {
+    "id": "dushanzi",
+    "name": "独山子大峡谷",
+    "region": "克拉玛依 · 独山子",
+    "type": "峡谷",
+    "group": "自然",
+    "coord": [
+      84.75635,
+      44.157319
+    ],
+    "precision": "区域锚点",
+    "zoom": 12,
+    "subtitle": "峡谷 · 地图精选地点",
+    "note": "依据 OpenStreetMap 标注的位置；景区范围、入口及可通行路线请以当地信息为准。",
+    "locationSource": "https://www.openstreetmap.org/way/1263802733"
+  },
+  {
+    "id": "haishang",
+    "name": "海上魔鬼城",
+    "region": "阿勒泰 · 福海",
+    "type": "湖滨雅丹",
+    "group": "自然",
+    "coord": [
+      87.483585,
+      46.988573
+    ],
+    "precision": "区域锚点",
+    "zoom": 12,
+    "subtitle": "湖滨雅丹 · 地图精选地点",
+    "note": "依据 OpenStreetMap 标注的位置；景区范围、入口及可通行路线请以当地信息为准。",
+    "locationSource": "https://www.openstreetmap.org/way/1421115874"
+  },
+  {
+    "id": "anjihai",
+    "name": "安集海大峡谷",
+    "region": "塔城 · 沙湾",
+    "type": "峡谷",
+    "group": "自然",
+    "coord": [
+      85.100054,
+      44.105367
+    ],
+    "precision": "OSM 地图点",
+    "zoom": 12,
+    "subtitle": "峡谷 · 地图精选地点",
+    "note": "依据 OpenStreetMap 标注的位置；景区范围、入口及可通行路线请以当地信息为准。",
+    "locationSource": "https://www.openstreetmap.org/node/5255659933"
+  }
+]

@@ -1,6 +1,9 @@
 // Coordinates are [longitude, latitude] in WGS84. An approximate marker is
 // explicitly identified in the interface; it must never be used for navigation.
-export const places = [
+import osmPlaces from './osmPlaces.json';
+import landmarkPlaces from './landmarkPlaces.json';
+
+export const curatedPlaces = [
   { id: 'tata', name: '塔塔秘境', region: '巴音郭楞 · 尉犁', type: '沙漠与胡杨', group: '自然', coord: [86.55, 40.78], precision: '范围标注', zoom: 10, subtitle: '罗布湖、沙丘与塔里木河', note: '尉犁县 G218 887 公里处。景区范围较大，锚点仅用于总览。', locationSource: 'https://www.yuli.gov.cn/xjylx/c111274/202505/d0a0203752be47169f808bcc1f658e65.shtml' },
   { id: 'tomur', name: '温宿托木尔大峡谷', region: '阿克苏 · 温宿', type: '峡谷', group: '自然', coord: [80.689559, 41.633439], precision: '景区附近', zoom: 11, subtitle: '赭红峡谷与盐丘地貌', note: '亦称天山托木尔景区大峡谷。', locationSource: 'https://wlt.xinjiang.gov.cn/wlt/c112782/202511/4bf442dcfab84b578dcff45240ce3824.shtml' },
   { id: 'oytakh', name: '奥依塔克红山峡谷', region: '克州 · 阿克陶', type: '红山峡谷', group: '自然', coord: [75.49382, 38.94759], precision: '景区范围', zoom: 11, subtitle: '红层山体与高原河谷', note: '以奥依塔克红山谷附近地貌作范围锚点。', locationSource: 'https://mapcarta.com/W1428173527' },
@@ -20,7 +23,23 @@ export const places = [
   { id: 'bosten', name: '博斯腾湖', region: '巴音郭楞 · 博湖', type: '湖泊', group: '湖泊', coord: [86.96, 41.96], precision: '湖区范围', zoom: 10, subtitle: '芦苇湿地与辽阔湖面', note: '面积很大的湖泊，锚点仅表示湖区；图片可能来自不同岸线。', locationSource: 'https://www.openstreetmap.org/search?query=Bosten%20Lake' },
   { id: 'luobu', name: '罗布人村寨', region: '巴音郭楞 · 尉犁', type: '沙漠村寨', group: '人文', coord: [86.111, 41.086], precision: '景区游客中心附近', zoom: 12, subtitle: '沙丘、胡杨与塔里木河', note: '锚点邻近景区游客中心，游览范围较大。', locationSource: 'https://www.amap.com/place/B03E40MBXH' },
   { id: 'qiuci', name: '龟兹乐舞', region: '阿克苏 · 库车', type: '文化主题', group: '人文', coord: [82.964, 41.718], precision: '城市主题锚点', zoom: 13, subtitle: '以库车为线索的乐舞文化', note: '龟兹乐舞是一项文化主题，不是单一景点；地图锚点放在库车城区。', locationSource: 'https://www.openstreetmap.org/search?query=Kuqa' },
-  { id: 'kizil', name: '克孜尔千佛洞', region: '阿克苏 · 拜城', type: '石窟', group: '人文', coord: [82.50286, 41.77718], precision: '石窟锚点', zoom: 14, subtitle: '岩壁上的龟兹石窟艺术', note: '锚点取石窟景区；洞窟内部摄影须遵守现场规定。', locationSource: 'https://mapcarta.com/N6989587788' }
+  { id: 'kizil', name: '克孜尔千佛洞', region: '阿克苏 · 拜城', type: '石窟', group: '人文', coord: [82.50286, 41.77718], precision: '石窟锚点', zoom: 14, subtitle: '岩壁上的龟兹石窟艺术', note: '锚点取石窟景区；洞窟内部摄影须遵守现场规定。', locationSource: 'https://mapcarta.com/N6989587788' },
+  { id: 'tianchi', name: '天山天池', region: '昌吉 · 阜康', type: '高山湖泊', group: '湖泊', coord: [88.1304, 43.8847], precision: '湖区锚点', zoom: 12, subtitle: '博格达峰下的高山湖泊', note: '湖泊与周边景区范围较大；此点仅用于地图总览。', locationSource: 'https://www.openstreetmap.org/way/261159583' },
+  { id: 'koktokay', name: '可可托海 · 额尔齐斯大峡谷', region: '阿勒泰 · 富蕴', type: '峡谷与地质公园', group: '自然', coord: [89.868708, 47.215735], precision: '峡谷附近', zoom: 12, subtitle: '地质公园的峡谷河源景观', note: '可可托海景区覆盖多个片区；锚点标在额尔齐斯大峡谷附近。', locationSource: 'https://www.openstreetmap.org/node/11897099964' }
 ];
 
-export const groups = ['全部', '自然', '湖泊', '人文'];
+export const places = [
+  ...curatedPlaces,
+  ...landmarkPlaces,
+  ...osmPlaces.map((spot) => ({
+    ...spot,
+    region: '新疆 · 开放地图补充',
+    zoom: spot.precision === 'OSM 地图点' ? 13 : 11,
+    subtitle: `${spot.type} · OpenStreetMap 地点索引`,
+    note: '此地点来自开放地图贡献者，仅作为旅行地点索引。名称、范围和开放状态请查看原始标注及当地信息。',
+    locationSource: spot.source,
+    sourceKind: 'osm',
+  })),
+];
+
+export const groups = ['全部', '精选', '自然', '湖泊', '人文'];
